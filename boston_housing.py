@@ -9,6 +9,7 @@ from sklearn import cross_validation
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import make_scorer
 from sklearn.grid_search import GridSearchCV
+from sklearn.neighbors import NearestNeighbors
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
 ################################
@@ -187,14 +188,22 @@ def fit_predict_model(city_data):
     print "Final Model: "
     reg.fit(X, y)
     print reg.best_params_
+    print reg.best_estimator_
     
     # Use the model to predict the output of a particular sample
-    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
-    y = reg.predict(x)
-    print "House: " + str(x)
-    print "Prediction: " + str(y)
+    x1 = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    y1 = reg.predict(x1)
+    print "House: " + str(x1)
+    print "Prediction: " + str(y1)
 
-    '''In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about''' 
+    neigh = NearestNeighbors(n_neighbors=10)
+    neigh.fit(X)
+    neighbors_price=[]
+    for index in neigh.kneighbors([x1])[1][0]:
+	neighbors_price.append(y[index])
+
+    print "Mean of prices of 10 feature-wise nearest houses", np.mean(neighbors_price)
+    print "Standard Deviation of 10 feature-wise nearest houses from the mean", np.std(neighbors_price)	
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
     performanance of a Decision Tree regressor on the housing data.
@@ -213,7 +222,7 @@ def main():
     max_depths = [1,2,3,4,5,6,7,8,9,10]
     for max_depth in max_depths:
         learning_curve(max_depth, X_train, y_train, X_test, y_test)
-
+    
     # Model Complexity Graph
     model_complexity(X_train, y_train, X_test, y_test)
 
