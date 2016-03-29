@@ -1,6 +1,3 @@
-"""Load the Boston dataset and examine its target (label) distribution."""
-
-# Load libraries
 import numpy as np
 import pylab as pl
 from sklearn import datasets
@@ -10,77 +7,34 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import make_scorer
 from sklearn.grid_search import GridSearchCV
 from sklearn.neighbors import NearestNeighbors
-################################
-### ADD EXTRA LIBRARIES HERE ###
-################################
 
 
 def load_data():
-    """Load the Boston dataset."""
-
     boston = datasets.load_boston()
     return boston
 
 
 def explore_city_data(city_data):
-    """Calculate the Boston housing statistics."""
-
-    # Get the labels and features from the housing data
     housing_prices = city_data.target
     housing_features = city_data.data
 
-    ###################################
-    ### Step 1. YOUR CODE GOES HERE ###
-    ###################################
-
-    # Please calculate the following values using the Numpy library
-    # Size of data (number of houses)?
     print "Number of houses", housing_features.shape[0]
-
-    # Number of features?
     print "Number of features", housing_features.shape[1]
-    
-    # Minimum price?
     print "Minimum price", np.amin(housing_prices)
-
-    # Maximum price?
     print "Maximum price", np.amax(housing_prices)
-
-    # Calculate mean price?
     print "Mean price", np.average(housing_prices)
-
-    # Calculate median price?
     print "Median price", np.median(housing_prices)
-
-    # Calculate standard deviation?
     print "Standard Deviation", np.std(housing_prices)
 
 def split_data(city_data):
-    """Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
-    
-    # Get the features and labels from the Boston housing data
     X, y = city_data.data, city_data.target
-
-    ###################################
-    ### Step 2. YOUR CODE GOES HERE ###
-    ###################################
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.3, random_state=0)
     return X_train, y_train, X_test, y_test
 
-
 def performance_metric(label, prediction):
-    """Calculate and return the appropriate error performance metric."""
-
-    ###################################
-    ### Step 3. YOUR CODE GOES HERE ###
-    ###################################
-
-    # The following page has a table of scoring functions in sklearn:
-    # http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
     return mean_squared_error(label, prediction)
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
-    """Calculate the performance of the model after a set of training data."""
 
     # We will vary the training set size so that we have 50 different sizes
     sizes = np.round(np.linspace(1, len(X_train), 50))
@@ -169,9 +123,6 @@ def fit_predict_model(city_data):
 
     parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
 
-    ###################################
-    ### Step 4. YOUR CODE GOES HERE ###
-    ###################################
 
     # 1. Find an appropriate performance metric. This should be the same as the
     # one used in your performance_metric procedure above:
@@ -204,6 +155,7 @@ def fit_predict_model(city_data):
 
     print "Mean of prices of 10 feature-wise nearest houses", np.mean(neighbors_price)
     print "Standard Deviation of 10 feature-wise nearest houses from the mean", np.std(neighbors_price)	
+    
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
     performanance of a Decision Tree regressor on the housing data.
